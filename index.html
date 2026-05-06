@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>System Terminal - Access Denied</title>
+    <style>
+        body {
+            background-color: black;
+            color: #00FF00;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        #terminal { width: 100%; }
+
+        .linea {
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid #00FF00;
+            animation: typing 0.5s steps(30, end), blink 0.5s step-end infinite;
+        }
+
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+        @keyframes blink { from, to { border-color: transparent } 50% { border-color: #00FF00 } }
+
+        .error { color: red; font-weight: bold; }
+        .warning { color: yellow; }
+
+        /* Estilos de la barra de carga */
+        #contenedor-barra {
+            display: none; /* Se oculta al principio */
+            width: 300px;
+            border: 1px solid #00FF00;
+            height: 20px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        #progreso {
+            background-color: #00FF00;
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s;
+        }
+
+        #porcentaje { margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="terminal"></div>
+    
+    <div id="contenedor-barra">
+        <div id="progreso"></div>
+    </div>
+    <div id="porcentaje"></div>
+
+    <script>
+        const mensajes = [
+            "> [SISTEMA] Preparando extraccion de archivos del celular...",
+            "> Conectando a servidor remoto...",
+            "> Bypass firewall iniciado...",
+            "> Accediendo a la base de datos local...",
+            "> Accediendo a la galeria...",
+            "> Accediendo a contactos...",
+            "> Accediendo a cuentas...",
+            "> Accediendo a tiktok...",
+            "> Accediendo a instagram...",
+            "> Accediendo a WhatsApp...", 
+            "> [ERROR] Seguridad detectada. Saltando proxy...",
+            "> Obteniendo dirección IP: 192.168.1.104",
+            "> Extrayendo archivos de la carpeta 'Privado'...",
+            "> [AVISO] Descarga de historial de búsqueda al 45%...",
+            "> [AVISO] Descarga de historial de búsqueda al 100%...",
+            "> [AVISO] Extrayendo contactos de WhatsApp al 67%...",
+            "> [AVISO] Extrayendo contactos de WhatsApp al 100%...",
+            "> [SISTEMA] Terminando extraccion de archivos del celular...",
+            "> Enviando datos al servidor anónimo DGO..."
+        ];
+
+        let index = 0;
+        const terminal = document.getElementById('terminal');
+
+        function escribirLinea() {
+            if (index < mensajes.length) {
+                let div = document.createElement('div');
+                div.className = 'linea';
+                if (mensajes[index].includes('ERROR')) div.classList.add('error');
+                if (mensajes[index].includes('AVISO')) div.classList.add('warning');
+                
+                div.innerText = mensajes[index];
+                terminal.appendChild(div);
+                index++;
+                setTimeout(escribirLinea, 1200); 
+            } else {
+                iniciarCarga(); // Cuando terminan los mensajes, empieza la barra
+            }
+        }
+
+        function iniciarCarga() {
+            const contenedor = document.getElementById('contenedor-barra');
+            const barra = document.getElementById('progreso');
+            const textoPorcentaje = document.getElementById('porcentaje');
+            
+            contenedor.style.display = 'block';
+            let ancho = 0;
+
+            let intervalo = setInterval(() => {
+                if (ancho >= 100) {
+                    clearInterval(intervalo);
+                    setTimeout(finalBroma, 500);
+                } else {
+                    ancho++;
+                    barra.style.width = ancho + '%';
+                    textoPorcentaje.innerText = "PASANDO INFORMACION: " + ancho + "%";
+                }
+            }, 300); // Velocidad de la carga (más bajo es más rápido)
+        }
+
+        function finalBroma() {
+            let final = document.createElement('div');
+            final.innerHTML = `
+                <br>
+                <div class="error">----------------------------------------------</div>
+                <div class="error">!!! HAS SIDO HACKEADO POR DGO !!!</div>
+                <div class="error">----------------------------------------------</div>
+                <br>
+                <div style="color: white; font-size: 1.2rem;">> Mala mia </div>
+            `;
+            terminal.appendChild(final);
+        }
+
+        escribirLinea();
+    </script>
+</body>
+</html>
